@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <style>
+        body {
+            background-color:  #cecbcb;
+        }
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 1em;
+            padding: 1em;
+        }
+
+        td, th {
+            border: 1px solid #a9a9a9;
+            text-align: left;
+            padding: 8px;
+        }
+        .image, .hum {
+        text-align: center;
+        }
+
+
+
+    </style>
+    <meta charset="UTF-8">
+    <!--<link rel="stylesheet" type="text/css" media="screen" href="../static/style.css" />-->
+    <title>Pogoda 5 dni</title>
+</head>
+<body>
+<div style="text-align: center">
+    <!--<h1 th:if="${isLoginCorrect != null}" th:text="${isLoginCorrect? #messages.msg('LoginTemplate.loggedIn'):#messages.msg('LoginTemplate.badData')}" th:style="'color: '+${isLoginCorrect ? 'green': 'red'}"></h1>-->
+    <form method="post" action="./" >
+        Miasto: <input type="text" th:name="city" placeholder="Wpisz miasto">
+
+        <!--<span th:if="${#fields.hasErrors('password')}" th:errors ="*{password}"></span><br>-->
+        <input type="submit" value="Wyślij">
+    </form>
+    <!--<p th:if="${weathers != null} " th:block ="${weathers}"></p>-->
+
+    <table >
+        <tr>
+            <th>Time</th>
+            <th>Temp</th>
+            <th>Hum</th>
+            <th>Clouds</th>
+
+
+        </tr>
+        <th:block th:each="weather : ${weathers}">
+            <tr>
+                <td th:text="${weather.getDt()}">...</td>
+                <td th:text="${weather.getMainWeather().getTemp()}" th:style="'color: '+${weather.getMainWeather().getTemp() > 24 ? 'red': 'blue'}">...</td>
+                <td th:text="${weather.getMainWeather().getHumidity()}" class="hum">...</td>
+                <td class="image"><img th:attr="src=@{'http://openweathermap.org/img/w/' + ${weather.getMainWeather().getIcon()} + '.png'}"></td>
+            </tr>
+            <tr>
+                <!--<td colspan="2" th:text="${user.address}">...</td>-->
+            </tr>
+        </th:block>
+    </table>
+
+</div>
+
+</body>
+</html>
