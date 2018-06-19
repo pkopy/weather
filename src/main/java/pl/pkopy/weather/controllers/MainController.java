@@ -114,7 +114,7 @@ public class MainController {
                                    Model model){
         List<ListOfWheather> weathers = weatherService.getListOfWheathers();
         List<Page> pagination = new ArrayList<>();
-        int amountOfPages = weathers.size()/6;
+        int amountOfPages = (weathers.size()/6)+1;
         for (int i = 0; i < amountOfPages; i++) {
             pagination.add(new Page(i ));
         }
