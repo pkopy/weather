@@ -8,6 +8,7 @@ import pl.pkopy.weather.models.CityEntity;
 import pl.pkopy.weather.models.ListOfWheather;
 import pl.pkopy.weather.models.Repositories.CityRepository;
 import pl.pkopy.weather.models.services.CityService;
+import pl.pkopy.weather.models.services.Page;
 import pl.pkopy.weather.models.services.WeatherService;
 
 import java.util.ArrayList;
@@ -112,6 +113,12 @@ public class MainController {
     public String getPartOfWeather(@PathVariable("idWeather") int idWeather,
                                    Model model){
         List<ListOfWheather> weathers = weatherService.getListOfWheathers();
+        List<Page> pagination = new ArrayList<>();
+        int amountOfPages = weathers.size()/6;
+        for (int i = 0; i < amountOfPages; i++) {
+            pagination.add(new Page(i ));
+        }
+
         List<ListOfWheather> partOfWeather = new ArrayList<>();
         for(int i = idWeather * 6; i < 6 + (idWeather * 6); i++){
             if(i<weathers.size()){
@@ -121,6 +128,7 @@ public class MainController {
         }
         System.out.println(idWeather);
         model.addAttribute("weathers",partOfWeather);
+        model.addAttribute("pages", pagination);
         return "index";
     }
 }

@@ -23,6 +23,24 @@
         .image, .hum {
         text-align: center;
         }
+        .pagination {
+        text-align: center;
+        margin: 10px;
+
+        }
+        .pagination a {
+            color: black;
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color .3s;
+        }
+
+        .pagination a.active {
+            background-color: dodgerblue;
+            color: white;
+        }
+
+        .pagination a:hover:not(.active) {background-color: #ddd;}
 
 
 
@@ -63,6 +81,16 @@
             </tr>
         </th:block>
     </table>
+
+    <div class="pagination">
+
+
+
+            <a th:each="page: ${pages}"  th:href="'/'+${page.getId()}" th:text="${page.getId()}+1"></a>
+
+
+
+    </div>
 
 </div>
 
