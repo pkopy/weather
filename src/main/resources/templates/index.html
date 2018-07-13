@@ -1,98 +1,68 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <style>
-        body {
-            background-color:  #cecbcb;
-        }
-        table {
-            font-family: arial, sans-serif;
-            border-collapse: collapse;
-            width: 400px;
-            margin-left: auto;
-            margin-right: auto;
-            margin-top: 1em;
-            padding: 1em;
-        }
 
-        td, th {
-            border: 1px solid #a9a9a9;
-            text-align: left;
-            padding: 8px;
-        }
-        .image, .hum {
-        text-align: center;
-        }
-        .pagination {
-        text-align: center;
-        margin: 10px;
-
-        }
-        .pagination a {
-            color: black;
-            padding: 8px 16px;
-            text-decoration: none;
-            transition: background-color .3s;
-        }
-
-        .pagination a.active {
-            background-color: dodgerblue;
-            color: white;
-        }
-
-        .pagination a:hover:not(.active) {background-color: #ddd;}
-
-
-
-    </style>
     <meta charset="UTF-8">
     <!--<link rel="stylesheet" type="text/css" media="screen" href="../static/style.css" />-->
     <title>Pogoda 5 dni</title>
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,700" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
 </head>
 <body>
-<div style="text-align: center">
-    <!--<h1 th:if="${isLoginCorrect != null}" th:text="${isLoginCorrect? #messages.msg('LoginTemplate.loggedIn'):#messages.msg('LoginTemplate.badData')}" th:style="'color: '+${isLoginCorrect ? 'green': 'red'}"></h1>-->
-    <form method="post" action="./" >
-        Miasto: <input type="text" th:name="city" placeholder="Wpisz miasto">
+<header>
+    <h2>Pogoda w twoim mieście na najbliższe 5 dni</h2>
 
-        <!--<span th:if="${#fields.hasErrors('password')}" th:errors ="*{password}"></span><br>-->
-        <input type="submit" value="Wyślij">
+</header>
+<main>
+    <h3 th:text="${city}"></h3>
+    <form method="post" action="./" th:if="${city == null}">
+        Miasto: <input type="text" th:name="city" >
+
+        <br>
+        <button type="submit" class="button">Szukaj</button>
     </form>
-    <!--<p th:if="${weathers != null} " th:block ="${weathers}"></p>-->
-
-    <table >
-        <tr>
-            <th>Time</th>
-            <th>Temp</th>
-            <th>Hum</th>
-            <th>Clouds</th>
+    <a href="./" th:if="${city != null}" class="button">Szukaj ponownie</a>
 
 
-        </tr>
-        <th:block th:each="weather : ${weathers}">
-            <tr>
-                <td th:text="${weather.getDt()}">...</td>
-                <td th:text="${weather.getMainWeather().getTemp()}" th:style="'color: '+${weather.getMainWeather().getTemp() > 24 ? 'red': 'blue'}">...</td>
-                <td th:text="${weather.getMainWeather().getHumidity()}" class="hum">...</td>
-                <td class="image"><img th:attr="src=@{'http://openweathermap.org/img/w/' + ${weather.getMainWeather().getIcon()} + '.png'}"></td>
+
+    <div>
+
+        <table >
+            <tr th:if="${city != null}">
+                <th >Data i czas</th>
+                <th >Temperatura</th>
+                <th>Wilgotność</th>
+                <th>Zachmurzenie</th>
+
+
             </tr>
-            <tr>
-                <!--<td colspan="2" th:text="${user.address}">...</td>-->
-            </tr>
-        </th:block>
-    </table>
+            <th:block th:each="weather : ${weathers}">
+                <tr>
+                    <td th:text="${weather.getDt()}" class="date">...</td>
+                    <td th:text="${weather.getMainWeather().getTemp()}" th:style="'color: '+${weather.getMainWeather().getTemp() > 24 ? 'red': 'blue'}" class="temp">...</td>
+                    <td th:text="${weather.getMainWeather().getHumidity()}" class="hum">...</td>
+                    <td class="image"><img th:attr="src=@{'http://openweathermap.org/img/w/' + ${weather.getMainWeather().getIcon()} + '.png'}"></td>
+                </tr>
+
+            </th:block>
+        </table>
+    </div>
 
     <div class="pagination">
 
-
-
-            <a th:each="page: ${pages}"  th:href="'./'+${page.getId()}" th:text="${page.getId()}+1"></a>
-
-
+            <a th:each="page: ${pages}"  th:href="'./'+${page.getId()}" th:text="${page.getId()}+1" th:class="${idWeather == page.getId() ? 'active' : ''}" ></a>
 
     </div>
 
-</div>
+</main>
+<footer>
+
+        <p><small>© 2018 - pkopy.pl<br>
+            Data: http://api.openweathermap.org
+        </small></p>
+
+
+</footer>
 
 </body>
 </html>
