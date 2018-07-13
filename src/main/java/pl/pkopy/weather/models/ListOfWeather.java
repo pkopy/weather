@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ListOfWheather {
+public class ListOfWeather {
     @JsonProperty("list")
     private MainWeather mainWeather;
     private String dt;

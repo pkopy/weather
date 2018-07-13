@@ -8,7 +8,7 @@ import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import pl.pkopy.weather.models.ListOfWheather;
+import pl.pkopy.weather.models.ListOfWeather;
 import pl.pkopy.weather.models.MainWeather;
 
 import java.util.ArrayList;
@@ -22,32 +22,31 @@ public class WeatherService {
 
     @Value("${opnenweathermap.api_key}")
     private String apiKey;
-    private List<ListOfWheather> listOfWheathers;
+    private List<ListOfWeather> listOfWeathers;
 
 
-    public List<ListOfWheather> makeCall(String city){
-        listOfWheathers = new ArrayList<>();
-    JSONParser parser = new JSONParser();
+    public List<ListOfWeather> makeCall(String city){
+        listOfWeathers = new ArrayList<>();
+        JSONParser parser = new JSONParser();
 
 
         try {
             RestTemplate restTemplate = new RestTemplate();
-            String cos = restTemplate.getForObject("http://api.openweathermap.org/data/2.5/forecast?q=" + city + "&mode=json&appid=" + apiKey, String.class);
-//            System.out.println(cos);
-            Object obj = parser.parse(cos);
+            String res = restTemplate.getForObject("http://api.openweathermap.org/data/2.5/forecast?q=" + city + "&mode=json&appid=" + apiKey, String.class);
+            Object obj = parser.parse(res);
             JSONObject jsonObject = (JSONObject) obj;
 
-            JSONArray weaters = (JSONArray) jsonObject.get("list");
+            JSONArray weathers = (JSONArray) jsonObject.get("list");
 
 
-            for (int i = 0; i < weaters.size(); i++) {
-                String weater = weaters.get(i).toString();
-                Object obj1 = parser.parse(weater);
+            for (int i = 0; i < weathers.size(); i++) {
+                String weather = weathers.get(i).toString();
+                Object obj1 = parser.parse(weather);
                 JSONObject jsonObject1 = (JSONObject) obj1;
 
-                ListOfWheather listOfWheather = new ListOfWheather();
+                ListOfWeather listOfWeather = new ListOfWeather();
                 String dt = (String) jsonObject1.get("dt_txt");
-                listOfWheather.setDt(dt);
+                listOfWeather.setDt(dt);
 
                 Object obj2 =  parser.parse(jsonObject1.get("main").toString());
                 JSONObject jsonObject2 = (JSONObject) obj2;
@@ -61,7 +60,7 @@ public class WeatherService {
 
                 MainWeather mainWeather = new MainWeather();
                 Double temp;
-//                System.out.println(jsonObject2.get("temp").getClass().getName());
+
                 if(jsonObject2.get("temp").getClass().getName().equals("java.lang.Long")){
                     Long temp1 = (Long) jsonObject2.get("temp");
                     temp = temp1 * 1.0;
@@ -88,11 +87,9 @@ public class WeatherService {
                 mainWeather.setIcon(icon);
                 mainWeather.setTemp(Math.round(temp - 273.15));
 
-                listOfWheather.setMainWeather(mainWeather);
+                listOfWeather.setMainWeather(mainWeather);
 
-                listOfWheathers.add(listOfWheather);
-
-
+                listOfWeathers.add(listOfWeather);
 
             }
 
@@ -101,6 +98,6 @@ public class WeatherService {
             e.printStackTrace();
         }
 
-        return listOfWheathers;
+        return listOfWeathers;
     }
 }
