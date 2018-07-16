@@ -1,6 +1,7 @@
 body {
-    background-color:  #cecbcb;
+
     font-family: 'Lato', sans-serif;
+    background: #ffffff url('../img/geometry2.png');
 }
 
 header {
@@ -99,7 +100,7 @@ footer {
 
 }
 footer p {
-    color: #fff;
+    color: #000;
     margin: 0;
 
 }
